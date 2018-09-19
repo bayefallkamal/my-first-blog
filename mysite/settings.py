@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 import os
+from django.contrib import admin
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -31,13 +32,16 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'django.contrib.contenttypes',
+#    'grappelli.dashboard',
+    'grappelli',
     'django.contrib.admin',
     'django.contrib.auth',
-    'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'blog',
+
 ]
 
 MIDDLEWARE = [
@@ -104,7 +108,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'fr-fr'
 
 TIME_ZONE = 'Africa/Dakar'
 
@@ -122,3 +126,35 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 ALLOWED_HOSTS = ['127.0.0.1', 'kamalkhidma.pythonanywhere.com']
+
+
+# Customization GRAPPELLI
+SITE_NAME = "Daara Khidmamatoul Khadim"
+GRAPPELLI_ADMIN_TITLE = SITE_NAME
+
+GRAPPELLI_SWITCH_USER=False
+
+#Collapsibles proerties for GRAPPELLI Admin
+class ModelOptions(admin.ModelAdmin):
+    fieldsets = (
+        ('', {
+            'fields': ('title', 'subtitle', 'slug', 'pub_date', 'status',),
+        }),
+        ('Flags', {
+            'classes': ('grp-collapse grp-closed',),
+            'fields' : ('flag_front', 'flag_sticky', 'flag_allow_comments', 'flag_comments_closed',),
+        }),
+        ('Tags', {
+            'classes': ('grp-collapse grp-open',),
+            'fields' : ('tags',),
+        }),
+    )
+
+class StackedItemInline(admin.StackedInline):
+    classes = ('grp-collapse grp-open',)
+
+class TabularItemInline(admin.TabularInline):
+    classes = ('grp-collapse grp-open',)
+
+#custom dashboard
+#GRAPPELLI_INDEX_DASHBOARD = 'dashboard.CustomIndexDashboard'
